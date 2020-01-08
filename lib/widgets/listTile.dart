@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flag/flag.dart';
 
 class ListTileWithCard {
-  ListTileWithCard({@required this.title, this.subtitl,@required this.func});
-  final title, subtitl,func;
+  ListTileWithCard({@required this.title, this.subtitl,@required this.func,this.image});
+  final title, subtitl,func,image;
   buildlistcard() {
     return Card(
       elevation: 8.0,
@@ -20,7 +19,7 @@ class ListTileWithCard {
                   border: new Border(
                       right:
                           new BorderSide(width: 1.0, color: Colors.white24))),
-              child: Flags.getFullFlag('EG', 30, null),
+              child: image,
             ),
             title: Text(
               title,

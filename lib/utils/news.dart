@@ -1,13 +1,13 @@
 class news {
-  int timestamp;
-  int articleCount;
+  String status;
+  int totalResults;
   List<Articles> articles;
 
-  news({this.timestamp, this.articleCount, this.articles});
+  news({this.status, this.totalResults, this.articles});
 
   news.fromJson(Map<String, dynamic> json) {
-    timestamp = json['timestamp'];
-    articleCount = json['articleCount'];
+    status = json['status'];
+    totalResults = json['totalResults'];
     if (json['articles'] != null) {
       articles = new List<Articles>();
       json['articles'].forEach((v) {
@@ -18,8 +18,8 @@ class news {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['timestamp'] = this.timestamp;
-    data['articleCount'] = this.articleCount;
+    data['status'] = this.status;
+    data['totalResults'] = this.totalResults;
     if (this.articles != null) {
       data['articles'] = this.articles.map((v) => v.toJson()).toList();
     }
@@ -28,60 +28,68 @@ class news {
 }
 
 class Articles {
+  Source source;
+  String author;
   String title;
   String description;
   String url;
-  Null image;
+  String urlToImage;
   String publishedAt;
-  Source source;
+  String content;
 
   Articles(
-      {this.title,
-      this.description,
-      this.url,
-      this.image,
-      this.publishedAt,
-      this.source});
+      {this.source,
+        this.author,
+        this.title,
+        this.description,
+        this.url,
+        this.urlToImage,
+        this.publishedAt,
+        this.content});
 
   Articles.fromJson(Map<String, dynamic> json) {
+    source =
+    json['source'] != null ? new Source.fromJson(json['source']) : null;
+    author = json['author'];
     title = json['title'];
     description = json['description'];
     url = json['url'];
-    image = json['image'];
+    urlToImage = json['urlToImage'];
     publishedAt = json['publishedAt'];
-    source =
-        json['source'] != null ? new Source.fromJson(json['source']) : null;
+    content = json['content'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['title'] = this.title;
-    data['description'] = this.description;
-    data['url'] = this.url;
-    data['image'] = this.image;
-    data['publishedAt'] = this.publishedAt;
     if (this.source != null) {
       data['source'] = this.source.toJson();
     }
+    data['author'] = this.author;
+    data['title'] = this.title;
+    data['description'] = this.description;
+    data['url'] = this.url;
+    data['urlToImage'] = this.urlToImage;
+    data['publishedAt'] = this.publishedAt;
+    data['content'] = this.content;
     return data;
   }
 }
 
 class Source {
+  Null id;
   String name;
-  String url;
 
-  Source({this.name, this.url});
+  Source({this.id, this.name});
 
   Source.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     name = json['name'];
-    url = json['url'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
     data['name'] = this.name;
-    data['url'] = this.url;
     return data;
   }
 }
