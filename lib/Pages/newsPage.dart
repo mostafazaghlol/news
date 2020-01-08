@@ -1,12 +1,11 @@
 import 'dart:io';
-import 'package:flag/flag.dart';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:news/utils/constants.dart';
 import 'package:news/utils/news.dart';
 import 'dart:convert';
 import 'package:news/widgets/listTile.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 List<Articles> newsarticles = [];
 
@@ -16,6 +15,19 @@ class newsPage extends StatefulWidget {
 }
 
 class _newsPageState extends State<newsPage> {
+  List<DropdownMenuItem> DropItems = [
+    DropdownMenuItem(
+      child: Text('عربي'),
+      value: 'عربي',
+    ),
+    DropdownMenuItem(
+      child: Text('En'),
+      value: 'En',
+    ),
+  ];
+
+  var SelectedITem='عربي';
+
   @override
   void initState() {
     // TODO: implement initState
@@ -35,7 +47,7 @@ class _newsPageState extends State<newsPage> {
               title: newsarticles[index].title,
               subtitl: newsarticles[index].source.name,
               func: () {
-                print(index);
+                  _launchURL(newsarticles[index].url);
               }).buildlistcard();
         },
       ),
@@ -86,17 +98,35 @@ class _newsPageState extends State<newsPage> {
     print(reply);
   }
 
+  DropdownButton buildDropdownButton() {
+    return DropdownButton(
+      value: 'عربى',
+      items: DropItems,
+      onChanged: (v) {
+        SelectedITem = v;
+        print(v);
+        setState(() {});
+      },
+    );
+  }
+
   getImage(String url) {
-    if(url == null){
-      return Flags.getFullFlag('EG', 30, null);
-    }else{
-      Widget x;
-      try{
-        x = Image(image: NetworkImage(url),fit:BoxFit.cover,width: 100.0,);
-      }catch (e){
-        x = Flags.getFullFlag('EG', 30, null);
-      }
-      return  x;
+    Widget x;
+    x = FadeInImage.assetNetwork(
+      image: url,
+      placeholder: 'assets/loading.gif',
+      fit: BoxFit.cover,
+      width: 100.0,
+      height: 100.0,
+    );
+    return x;
+  }
+  _launchURL(ss) async {
+    var url = ss;
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
     }
   }
 }

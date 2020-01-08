@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
 class ListTileWithCard {
-  ListTileWithCard({@required this.title, this.subtitl,@required this.func,this.image});
-  final title, subtitl,func,image;
+  ListTileWithCard(
+      {@required this.title, this.subtitl, @required this.func, this.image});
+
+  final title, subtitl, func, image;
+
   buildlistcard() {
     return Card(
       elevation: 8.0,
@@ -32,7 +35,8 @@ class ListTileWithCard {
               children: <Widget>[
                 Icon(Icons.linear_scale, color: Colors.yellowAccent),
                 Expanded(
-                  flex: 1,child: Text(subtitl, style: TextStyle(color: Colors.white)))
+                    flex: 1,
+                    child: Text(subtitl, style: TextStyle(color: Colors.white)))
               ],
             ),
             trailing: Icon(Icons.keyboard_arrow_right,

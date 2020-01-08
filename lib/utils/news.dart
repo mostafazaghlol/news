@@ -48,8 +48,11 @@ class Articles {
         this.content});
 
   Articles.fromJson(Map<String, dynamic> json) {
-    source =
-    json['source'] != null ? new Source.fromJson(json['source']) : null;
+    if (json['source'] != null) {
+      source = new Source.fromJson(json['source']);
+    } else {
+      source = null;
+    }
     author = json['author'];
     title = json['title'];
     description = json['description'];
@@ -76,7 +79,7 @@ class Articles {
 }
 
 class Source {
-  Null id;
+  var id;
   String name;
 
   Source({this.id, this.name});
