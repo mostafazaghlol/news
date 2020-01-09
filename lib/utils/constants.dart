@@ -9,27 +9,17 @@ final topAppBar = AppBar(
   backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
   title: Text('news'),
 );
-
-final makeBottom = Container(
-  height: 55.0,
-  child: BottomAppBar(
-    color: Color.fromRGBO(58, 66, 86, 1.0),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        IconButton(
-          icon: Icon(Icons.home, color: Colors.white),
-          onPressed: () {},
-        ),
-        IconButton(
-          icon: Icon(Icons.settings, color: Colors.white),
-          onPressed: () {},
-        ),
-      ],
-    ),
-  ),
+final topAppBarSettings = AppBar(
+  automaticallyImplyLeading: false,
+  elevation: 0.1,
+  backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
+  title: Text('news setttings'),
 );
+
  
 const splach = '/';
 const newspage='/news';
 const settings = '/settings';
+const Ptextsize = 'textsize';
+const Pcategoriy = 'textcat';
+const Plange = 'textlanguage';

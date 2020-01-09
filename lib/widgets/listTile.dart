@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class ListTileWithCard {
   ListTileWithCard(
-      {@required this.title, this.subtitl, @required this.func, this.image});
+      {@required this.title, this.subtitl, @required this.func, this.image,this.titleSize});
 
-  final title, subtitl, func, image;
+  final title, subtitl, func, image,titleSize;
 
   buildlistcard() {
     return Card(
@@ -27,7 +27,7 @@ class ListTileWithCard {
             title: Text(
               title,
               style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  TextStyle(color: Colors.white, fontSize:titleSize,fontWeight: FontWeight.w400),
             ),
             // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
 
@@ -36,7 +36,7 @@ class ListTileWithCard {
                 Icon(Icons.linear_scale, color: Colors.yellowAccent),
                 Expanded(
                     flex: 1,
-                    child: Text(subtitl, style: TextStyle(color: Colors.white)))
+                    child: Text(subtitl, style: TextStyle(color: Colors.white,fontSize:titleSize)))
               ],
             ),
             trailing: Icon(Icons.keyboard_arrow_right,

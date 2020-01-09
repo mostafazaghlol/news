@@ -6,32 +6,29 @@ import 'package:news/utils/news.dart';
 import 'dart:convert';
 import 'package:news/widgets/listTile.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 List<Articles> newsarticles = [];
-
 class newsPage extends StatefulWidget {
   @override
   _newsPageState createState() => _newsPageState();
 }
 
 class _newsPageState extends State<newsPage> {
-  List<DropdownMenuItem> DropItems = [
-    DropdownMenuItem(
-      child: Text('عربي'),
-      value: 'عربي',
-    ),
-    DropdownMenuItem(
-      child: Text('En'),
-      value: 'En',
-    ),
-  ];
+  SharedPreferences prefs;
+  _setuppref() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
 
   var SelectedITem='عربي';
+  var titlesize = 14.0;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
     _getpass();
   }
 
@@ -43,6 +40,7 @@ class _newsPageState extends State<newsPage> {
         itemCount: newsarticles.length,
         itemBuilder: (context, index) {
           return ListTileWithCard(
+              titleSize:titlesize,
               image: getImage(newsarticles[index].urlToImage),
               title: newsarticles[index].title,
               subtitl: newsarticles[index].source.name,
@@ -51,7 +49,27 @@ class _newsPageState extends State<newsPage> {
               }).buildlistcard();
         },
       ),
-      bottomNavigationBar: makeBottom,
+      bottomNavigationBar: Container(
+        height: 55.0,
+        child: BottomAppBar(
+          color: Color.fromRGBO(58, 66, 86, 1.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              IconButton(
+                icon: Icon(Icons.settings, color: Colors.white),
+                onPressed: () {
+                  var result = Navigator.pushNamed(context, settings);
+                  result.then((c){
+                    print('hi');
+                    _getpass();
+                  });
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -72,25 +90,14 @@ class _newsPageState extends State<newsPage> {
   }
 
   _getpass() async {
+    await _setuppref();
     HttpClient client = new HttpClient();
     client.badCertificateCallback =
         ((X509Certificate cert, String host, int port) => true);
-
-    String url = urlNewsapi;
-
-//   Map map = {
-//     "email" : "email" ,
-//     "password" : "password"
-//   };
-
+    String url = getUrl();
     HttpClientRequest request = await client.getUrl(Uri.parse(url));
-
     request.headers.set('content-type', 'application/json');
-
-//   request.add(utf8.encode(json.encode(map)));
-
     HttpClientResponse response = await request.close();
-
     String reply = await response.transform(utf8.decoder).join();
     news N = news.fromJson(json.decode(reply));
     newsarticles = N.articles;
@@ -98,17 +105,6 @@ class _newsPageState extends State<newsPage> {
     print(reply);
   }
 
-  DropdownButton buildDropdownButton() {
-    return DropdownButton(
-      value: 'عربى',
-      items: DropItems,
-      onChanged: (v) {
-        SelectedITem = v;
-        print(v);
-        setState(() {});
-      },
-    );
-  }
 
   getImage(String url) {
     Widget x;
@@ -128,5 +124,37 @@ class _newsPageState extends State<newsPage> {
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  String getUrl() {
+    String country = 'eg';
+    if(prefs.containsKey(Plange)){
+      if(prefs.getBool(Plange)){
+        country = 'eg';
+      }else{
+        country = 'gb';
+      }
+    }
+    String cat='&category=';
+    if(prefs.containsKey(Pcategoriy)){
+      int catno = prefs.getInt(Pcategoriy);
+      if(catno== 0){
+        cat = '';
+      }else if(catno == 1){
+        cat = cat +'sports';
+      }else if(catno == 2){
+        cat = cat +'health';
+      }else if(catno == 3){
+        cat = cat +'science';
+      }else{
+        cat = cat +'technology';
+      }
+    }else{
+      cat = '';
+    }
+    if(prefs.containsKey(Ptextsize)){
+      titlesize = prefs.getDouble(Ptextsize);
+    }
+    return 'https://newsapi.org/v2/top-headlines?country=$country'+cat+'&apiKey=e8ec486d87a948bea30689ea024bc1eb';
   }
 }
